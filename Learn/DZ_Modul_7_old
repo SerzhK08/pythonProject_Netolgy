@@ -1,0 +1,106 @@
+def ing(l: list) -> dict:
+    l1 = l.split('|')
+    ing_dict = {}
+    ing_dict['ingredient_name'] = l1[0]
+    ing_dict['quantity'] = l1[1]
+    ing_dict['measure'] = l1[2].replace("\n", "")
+
+    return ing_dict
+
+
+def separate_str(l: list) -> dict:
+    d = {}
+    i = 0
+    while i <= (len(l) - 1):
+        ln = []
+        dish_name = l[i].replace("\n", "")
+        qty_ing = int(l[i + 1])
+        start = i + 2
+        fin = start + qty_ing
+        for j in l[start:fin]:
+            ln.append(ing(j))
+        d[dish_name] = ln
+        i = fin + 1
+    return d
+
+
+# **************************************************************
+def get_ingrt(dish: dict) -> list:  # Получаем ингредиенты блюда из созданного справочника dishes
+    ing_dict = [v for k, v in dishes.items() if k == dish]
+    return ing_dict[0]
+
+
+def add_elem_dict(ing_list: list, new_dict: dict) -> dict:  # Добавляем в новый справочник ингредиенты блюда
+    for el in ing_list:
+        name_ing = el['ingredient_name']
+        z = found_double(name_ing, new_dict)
+        if z:
+            qty_new = new_dict[el['ingredient_name']]['quantity']
+            new_dict[el['ingredient_name']]['quantity'] += qty_new
+        else:
+            del el['ingredient_name']
+            new_el = dict(reversed(el.items()))
+            new_dict[name_ing] = new_el
+            sort_dict = dict(sorted(new_dict.items()))
+
+    return sort_dict
+
+
+def found_double(ing: str, new_dict: dict) -> bool:  # Определяем наличие дублей в новом справочнике new_dict
+    found_elem = [k for k in new_dict.keys() if k == ing]
+    if len(found_elem) > 0:
+        return True
+    return False
+
+
+def get_shop_list_by_dishes(dishes: list, person_count=1) -> dict:
+    new_dict = {}
+    ing_prev = ''
+    for i in dishes:
+        ing_list = get_ingrt(i)
+        for el in ing_list:
+            qty = person_count * int(el['quantity'])
+            el['quantity'] = qty
+        new_dict = add_elem_dict(ing_list, new_dict)
+    for k, v in new_dict.items():
+        print(k, v)
+
+
+# **************************************************************
+
+print('**************** ЗАДАНИЕ 1. Получить словарь меню с ингредиентами из файла *********************')
+
+with open('Learn/Cook_Book.txt', 'r', encoding='utf8') as f:
+    a = f.readlines()
+    dishes = separate_str(a)
+    for k, v in dishes.items():
+        print('-------')
+        print(k)
+        for i in v:
+            print(i)
+        print('')
+
+print('**************** ЗАДАНИЕ 2. Название ингредиентов и их количество для блюд *********************')
+
+get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
+print('')
+
+print('**************** ЗАДАНИЕ 3. Прочитать текст из файлов *********************')
+
+d = {}
+d['1.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/1.txt', encoding='utf8'))
+d['2.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/2.txt'))
+d['3.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/3.txt'))
+
+l = [v for k, v in d.items()]
+
+with open('DZ_OpenReadWriteFile/result.txt', 'w', encoding='utf8') as f_res:
+    for i in sorted(l):
+        name_file = [k for k, v in d.items() if v == i]
+        f_read = open('DZ_OpenReadWriteFile/' + name_file[0], 'r', encoding='utf8')
+        f_res.write(f'\n{name_file[0]}\n{i}\n')
+        f_res.write(f_read.read())
+
+with open('DZ_OpenReadWriteFile/result.txt', 'r', encoding='utf8') as f_res:
+    txt = f_res.read()
+    print(txt)

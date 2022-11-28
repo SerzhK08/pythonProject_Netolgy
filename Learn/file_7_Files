@@ -1,0 +1,32 @@
+# try:
+#     somefile = open('Learn/Cook_Book_0.txt','w')
+#     try:
+#         somefile.write('Learn')
+#     except Exception as e:
+#         print(e)
+#     finally:
+#         somefile.close()
+# except Exception as ex:
+#     print(ex)
+
+# with open(file, mode) as file_obj:
+
+# with open('Learn/Cook_Book_2.txt', 'w') as somefile:
+#     somefile.write('somefile\nпривет')
+
+# текстовые файлы
+# чтение - R
+# readline() - считывает одну строку
+# read() - считывает все содержимое файла
+# readlines() - считывает все строки в список
+
+# with open('Learn/Cook_Book.txt', 'r') as file:
+#     a = file.readline()
+#     # for item in somefile:
+#     #     print(item)
+
+with open('Learn/Cook_Book.txt', 'r') as file:
+    # str1 = file.readline()
+    # print(str1)
+    cont = file.readlines()
+    print(cont)

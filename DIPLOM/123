@@ -1,0 +1,47 @@
+# from my_token import TOKEN_VK
+import requests
+from pprint import pprint
+import time
+import pandas as pd
+
+
+class VK:
+
+   def __init__(self, access_token, user_id, version='5.131'):
+       self.token = access_token
+       self.id = user_id
+       self.version = version
+       self.params = {'access_token': self.token, 'v': self.version}
+
+
+
+   def users_info(self):
+       url = 'https://api.vk.com/method/users.get'
+       params = {'user_ids': self.id}
+       response = requests.get(url, params={**self.params, **params})
+       return response.json()
+
+
+
+
+# access_token = 'vk1.a.yCqQwUB_WYGkHE5r3G1VaH8EJEOQH24wNDs3TI1hqeHrvfcUqyWIl8_IDSDsTEYRer5EVavg00fvOsrvnH-K1DlXGoj4sRwmavozABsN37k1Tr93GHYT2c5mp9VAPGMdfTejmCfDjTiyw6D7xbf0mFmYUmHLrZfueQdKQhI5Y_tPe7k35OcqFyBNBZCtg1z-nDecgd3rsq1RTgfwEVV_WQ'
+# user_id = '24055998'
+# vk = VK(access_token, user_id)
+# print(vk.users_info())
+
+
+with open ('content/tokens.txt') as file_object:
+    TOKEN_VK = file_object.readline().strip()
+    user_id = file_object.readline().strip()
+    TOKEN_YA = file_object.readline().strip()
+    print(TOKEN_VK)
+    print(user_id)
+    print(TOKEN_YA)
+
+access_token = TOKEN_VK
+vk = VK(access_token, user_id)
+print(vk.users_info())
+
+
+
+

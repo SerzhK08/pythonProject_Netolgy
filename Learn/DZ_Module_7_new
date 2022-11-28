@@ -1,0 +1,64 @@
+from pprint import pprint
+
+filepath = 'DZ_OpenReadWriteFile/Cook_Book.txt'
+
+print('')
+print('*********** ЗАДАНИЕ 1. Получить словарь меню с ингредиентами из файла ****************')
+print('')
+def make_cookbook(filepath: str):
+    dishes_dict = {}
+    with open(filepath, encoding='utf8') as file:
+        for rec in file:
+            dish = rec.strip()
+            # print(dish)
+            q = int(file.readline())
+            # print(q)
+            ingr_list = []
+            for i in range(q):
+                ingr = file.readline().split(' | ')
+                ingredients = {'ingredientname': ingr[0].strip(), 'quantity': int(ingr[1]), 'measure': ingr[2].strip()}
+                ingr_list.append(ingredients)
+            dishes_dict.update({dish: ingr_list})
+            file.readline()
+        return dishes_dict
+
+pprint(make_cookbook(filepath), width=70, sort_dicts=False)
+
+print('')
+print('*********** ЗАДАНИЕ 2. Название ингредиентов и их количество для блюд ****************')
+print('')
+def getshoplistbydishes(dishes: list, filepath: str, person_count=1):
+    cookbook = make_cookbook(filepath)
+    shop_dict = {}
+    for dish in dishes:
+        for ingredients in cookbook.get(dish, []):
+            ingr_name = ingredients['ingredientname']
+            if ingr_name in shop_dict.keys():
+                shop_dict[ingr_name]['quantity'] += ingredients['quantity'] * person_count
+            else:
+                shop_dict[ingr_name] = {'quantity': ingredients['quantity'] * person_count, 'measure': ingredients['measure']}
+
+    return shop_dict
+
+pprint(getshoplistbydishes(['Омлет','Фахитос'], filepath, 3))
+
+print('')
+print('')
+print('*********** ЗАДАНИЕ 3. Прочитать текст из файлов ****************')
+d = {}
+d['1.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/1.txt', encoding='utf8'))
+d['2.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/2.txt'))
+d['3.txt'] = sum(1 for line in open('DZ_OpenReadWriteFile/3.txt'))
+
+l = [v for k, v in d.items()]
+
+with open('DZ_OpenReadWriteFile/result.txt', 'w', encoding='utf8') as f_res:
+    for i in sorted(l):
+        name_file = [k for k, v in d.items() if v == i]
+        f_read = open('DZ_OpenReadWriteFile/' + name_file[0], 'r', encoding='utf8')
+        f_res.write(f'\n{name_file[0]}\n{i}\n')
+        f_res.write(f_read.read())
+
+with open('DZ_OpenReadWriteFile/result.txt', 'r', encoding='utf8') as f_res:
+    txt = f_res.read()
+    print(txt)
