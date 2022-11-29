@@ -7,8 +7,11 @@ import json
 import sys
 import time
 from tqdm import tqdm
+# from alive_progress import alive_bar
+# from progressbar2
 
 
+help(yadisk)
 
 with open('content/tokens.txt', 'r', encoding='utf8') as file_object:
     TOKEN_VK = file_object.readline().strip()
@@ -82,6 +85,25 @@ class user_YA:
 
 
 
+
+# class user_Google:
+#     # по аналогии с vk
+#     def __init__(self.token = access_token
+#     self.id = user_id
+#     self.version = version
+#     self.params = {'access_token': self.token, 'v': self.version}
+#
+#     def get_photo(self, ggl_id: str):
+#         # https://api.google.com/method/photos.get
+#         url = 'https://api.google.com/method/photos.get'
+#         params = {'user_ids': self.id}
+#         response = requests.get(url, params={**self.params, **params})
+#         return response.json()
+#
+#     def parsed_photo(self, photo_info: list):
+#         pass
+#
+#
 def likes_qty(list_photo: list) -> set:
     likes_set = set()
     for i in list_photo:
@@ -99,6 +121,7 @@ def download_photo(url, newpath, filename):
 
 def main():
     vk_id = ID_VK #input("Введите номер пользователя")
+    # dt_current = datetime.date.today()
     name_directory = "Backup_" + str(datetime.date.today()).replace('-', '_')  # input("Введите название папки для хранения файла на Яндекс.диске: ")
     vk_token = TOKEN_VK
     vk = user_VK(vk_token, vk_id)
@@ -124,11 +147,23 @@ def main():
         photos_list.append(photos_param)
         time.sleep(0.2)
 
+
+
+
+    # choise = input("Выберите сервис для загрузки:\n"
+    #                "1 - Яндекс.Диск\n"
+    #                "2 - Google.Диск\n"
+    #                "Введите команду:")
     choise = "1"
     if choise == "1":
         user_yandex = user_YA(TOKEN_YA)
         user_yandex.upload_file(name_directory, photos_list)
 
+    #
+    # if choise == "2":
+    #     user_gooogle = user_Google()
+    #     user_gooogle.create_new_folder(name_directory)
+    #     user_gooogle.upload_file(parsed_photo, name_directory)
 
 
 if __name__ == '__main__':
